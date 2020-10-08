@@ -1,0 +1,4 @@
+esmacik myUSERNAME Student
+sokka123 anotherpassw0rd Family
+william45 securepa55w0rd Individual
+joshua_student password Student
