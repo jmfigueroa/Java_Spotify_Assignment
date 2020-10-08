@@ -12,11 +12,16 @@ ________
   Java](https://www.youtube.com/watch?v=4xKihjI6HJ0)
 - [Java Programming Tutorial - 05 - Storing and Accessing Instance Variables of
   an Object](https://www.youtube.com/watch?v=q4vknQYjHy8)
+- [StackOverflow: Check Object Empty](https://stackoverflow.com/a/14463338)
 
 ### Strings
 - [Java String split() Method with examples](https://beginnersbook.com/2013/12/java-string-split-method-example/)
 -
 [StackOverflow: Splitting an array of strings in Java using .split](https://stackoverflow.com/questions/19431710/splitting-an-array-of-strings-in-java-using-split)
+-
+[StackOverflow: Split string with dot as
+delimiter](https://stackoverflow.com/a/3387646) - b/c regex
+
 ### ArrayList
 - [Get the size of an ArrayList in Java](https://www.tutorialspoint.com/get-the-size-of-an-arraylist-in-java#:~:text=The%20size%20of%20an%20ArrayList%20can%20be%20obtained%20by%20using,the%20ArrayList%20i.e.%20the%20size.)
 - [How to iterate through an ArrayList of Objects of ArrayList of Objects](https://xspdf.com/resolution/58257776.html)

@@ -22,11 +22,13 @@ public class Spotify {
     String username = scn.nextLine();
     System.out.print("Password: ");
     String password = scn.nextLine();
+
     User user = checkCredentials(username, password, accounts);
-    if (!user.getUsername().isEmpty()) {
+    if (user.isValid()) {
+      clearConsole();
       System.out.println("Welcome back, " + user.getUsername());
       navMenu(user, scn);
-    } else {
+    } else if (!user.isValid()) {
       ++counter;
       start(counter);
     }
@@ -34,15 +36,20 @@ public class Spotify {
   }
 
   public static void navMenu(User usr, Scanner sc) {
+    clearConsole();
     System.out.println("Please select an option: ");
     System.out.println("1) View your account information \n2) Change your current plan \n3) Exit");
     Integer optionSelected = sc.nextInt();
     if (optionSelected == 1) {
+      clearConsole();
       viewAccountInfo(usr, sc);
+      wait(3000);
       navMenu(usr, sc);
     } else if (optionSelected == 2) {
+      clearConsole();
       changePlan(usr, sc);
     } else if (optionSelected == 3) {
+      clearConsole();
       System.out.println("Thank you for using Spotify.\nNow exiting");
       ellipses(0);
       System.exit(0);
@@ -53,17 +60,23 @@ public class Spotify {
     System.out.println("Username: " + u.getUsername());
     System.out.println("Password: *********");
     System.out.println("Account Type: " + u.getAccountType());
+    System.out.println("Monthly Charges: $" + u.getFeePerMonth() + " per month");
     System.out.println();
   }
 
   public static void changePlan(User u, Scanner s) {
-    System.out.println("You are currently under the " + u.getAccountType().toUpperCase()
-        + " plan. Would you like to change your plan? (y/n)");
+    String originalPlan = u.getAccountType();
+    System.out.println("Your current account settings:");
+    System.out.println("Account Type: " + u.getAccountType().toUpperCase());
+    System.out.println("Charges: $" + u.getFeePerMonth() + " per month");
+    System.out.println();
+    System.out.println("Would you like to change your plan? (y/n)");
     s.nextLine();
     String res = s.nextLine();
+    clearConsole();
     // Change Plan?
     if (res.equals("Y") || res.equals("y")) {
-      System.out.println("Would you like to change your plan to:\n1) Student\n2) Individual\n3)Family\n4) Exit");
+      System.out.println("Would you like to change your plan to:\n1) Student\n2) Individual\n3) Family\n4) Exit");
       int newPlan = s.nextInt();
       // Exit
       if (newPlan == 4) {
@@ -76,33 +89,64 @@ public class Spotify {
         u.setAccountType("Family");
         // Student
       } else if (newPlan == 1) {
-        int eduCounter = 0;
-        System.out.println("In order to qualify for the Spotify Student plan, we'll have to verify your eligibility.");
-        if (eduCounter < 2) {
-          System.out.print("\nPlease enter your STUDENT email address:");
-          String emailAddress = s.nextLine();
-          ellipses(0);
-          if (verifyEdu(emailAddress)) {
-            System.out.println("Congratuations. Your student email has been verified!");
-            u.setAccountType("Student");
-          }
-        } else {
-          System.out.println("Sorry, you are not elibile for the Student plan.");
-        }
+        clearConsole();
+        System.out
+            .println("In order to qualify for the Spotify Student plan, \nwe'll have to verify your eligibility.");
+        wait(2500);
+        int c = 0;
+        handleStudentOption(u, s, c);
+      } else {
+        clearConsole();
+        System.out.println("Sorry, you are not eligible for the Student plan.");
+        navMenu(u, s);
       }
-      System.out.println("Your plan has been changed to the " + u.getAccountType() + " plan. You will be billed $"
-          + u.getFeePerMonth() + " per month beginning the next billing cycle.");
-
+      clearConsole();
+      if (u.getAccountType().equals(originalPlan)) {
+        clearConsole();
+        System.out.println("No changes made.\nAccount Information");
+        viewAccountInfo(u, s);
+        wait(2500);
+        navMenu(u, s);
+      } else {
+        System.out.println("Your plan has been changed to the " + u.getAccountType() + " plan. You will be billed $"
+            + u.getFeePerMonth() + " per month beginning the next billing cycle.");
+        wait(3000);
+        navMenu(u, s);
+      }
     } else {
       navMenu(u, s);
+    }
+  }
+
+  public static void handleStudentOption(User u, Scanner s, int eduCounter) {
+    ++eduCounter;
+    clearConsole();
+    System.out.print("Please enter your STUDENT email address: ");
+    s.nextLine();
+    String emailAddress = s.nextLine();
+    ellipses(0);
+    if (eduCounter < 2) {
+      if (verifyEdu(emailAddress)) {
+        clearConsole();
+        System.out.println("Congratuations. Your student email has been verified!");
+        wait(1500);
+        u.setAccountType("Student");
+        clearConsole();
+      } else {
+        System.out.println("Sorry, we weren't able to verify your STUDENT email address. \nPlease try again...");
+        handleStudentOption(u, s, eduCounter);
+      }
+    } else {
+      System.out.println("We're sorry but you are not eligible for the Spotify Student plan.");
+      wait(2500);
     }
   }
 
   public static Boolean verifyEdu(String email) {
     Boolean isEdu = false;
     String domain = email.split("@")[1];
-    Integer l = domain.split(".").length;
-    String topLvlDomain = domain.split(".")[l - 1];
+    String topLvlDomain = domain.toString().split("\\.")[domain.split("\\.").length - 1];
+    System.out.println(topLvlDomain);
     if (topLvlDomain.equals("edu")) {
       isEdu = true;
     }
@@ -156,11 +200,13 @@ public class Spotify {
       System.exit(0);
     }
     ellipses(0);
-    System.out.println("\n" + response);
+    clearConsole();
+    System.out.println(response);
+    wait(1500);
     return authenticatedUser;
-
   }
 
+  // Utility Methods
   public static void ellipses(int accumulator) {
     if (accumulator < 4) {
       try {
@@ -171,6 +217,14 @@ public class Spotify {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
+    }
+  }
+
+  public static void wait(int ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
   }
 
@@ -214,4 +268,11 @@ class User {
     }
   }
 
+  public boolean isValid() {
+    boolean isValid = false;
+    if (this.accountType != null && this.password != null && this.username != null) {
+      isValid = true;
+    }
+    return isValid;
+  }
 }
