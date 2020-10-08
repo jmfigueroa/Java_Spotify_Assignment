@@ -161,7 +161,7 @@ public class Spotify {
       }
     } else {
       clearConsole();
-      System.out.println("Pease enter a valid and active STUDENT email address");
+      System.out.println("Please enter a valid and active STUDENT email address");
       wait(2500);
     }
     return isEdu;
