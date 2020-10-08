@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 public class Spotify {
   public static void main(String[] args) {
-    System.out.println("Welcome to Spotify/nHere you can check your Spotify account settings.");
+    clearConsole();
+    System.out.println("Welcome to Spotify Account Center\nHere you can check your Spotify account settings.");
     Integer loginCounter = 0;
     start(loginCounter);
   }
@@ -23,7 +24,6 @@ public class Spotify {
     String password = scn.nextLine();
     User user = checkCredentials(username, password, accounts);
     if (!user.getUsername().isEmpty()) {
-      // Proceed
       System.out.println("Welcome back, " + user.getUsername());
       navMenu(user, scn);
     } else {
@@ -57,22 +57,56 @@ public class Spotify {
   }
 
   public static void changePlan(User u, Scanner s) {
-    System.out.println(
-        "You are currently under the " + u.getAccountType() + " plan. Would you like to change your plan? (y/n)");
+    System.out.println("You are currently under the " + u.getAccountType().toUpperCase()
+        + " plan. Would you like to change your plan? (y/n)");
+    s.nextLine();
     String res = s.nextLine();
-    // EXITING HERE
+    // Change Plan?
     if (res.equals("Y") || res.equals("y")) {
-      System.out.println("Would you like to change your plan to:\n1) Student\2) Individual\n3)Family\4) Exit");
+      System.out.println("Would you like to change your plan to:\n1) Student\n2) Individual\n3)Family\n4) Exit");
       int newPlan = s.nextInt();
+      // Exit
       if (newPlan == 4) {
         navMenu(u, s);
+        // Individual
       } else if (newPlan == 2) {
         u.setAccountType("Individual");
-        System.out.println("Your plan has been changed to the " + u.getAccountType()
-            + " plan. You will be billed $9.99 per month beginning the next billing cycle.");
+        // Family
+      } else if (newPlan == 3) {
+        u.setAccountType("Family");
+        // Student
+      } else if (newPlan == 1) {
+        int eduCounter = 0;
+        System.out.println("In order to qualify for the Spotify Student plan, we'll have to verify your eligibility.");
+        if (eduCounter < 2) {
+          System.out.print("\nPlease enter your STUDENT email address:");
+          String emailAddress = s.nextLine();
+          ellipses(0);
+          if (verifyEdu(emailAddress)) {
+            System.out.println("Congratuations. Your student email has been verified!");
+            u.setAccountType("Student");
+          }
+        } else {
+          System.out.println("Sorry, you are not elibile for the Student plan.");
+        }
       }
+      System.out.println("Your plan has been changed to the " + u.getAccountType() + " plan. You will be billed $"
+          + u.getFeePerMonth() + " per month beginning the next billing cycle.");
 
+    } else {
+      navMenu(u, s);
     }
+  }
+
+  public static Boolean verifyEdu(String email) {
+    Boolean isEdu = false;
+    String domain = email.split("@")[1];
+    Integer l = domain.split(".").length;
+    String topLvlDomain = domain.split(".")[l - 1];
+    if (topLvlDomain.equals("edu")) {
+      isEdu = true;
+    }
+    return isEdu;
   }
 
   public static ArrayList<User> readFileToArrayList() {
@@ -98,7 +132,9 @@ public class Spotify {
   }
 
   public static Boolean validateUserInput(String usernm, String passwd) {
-    // validation logic which returns boolean
+    // validation logic which checks userInput for dangerous input
+    // (e.g., escaped characters)
+    // returns boolean
     return true;
   }
 
@@ -137,6 +173,11 @@ public class Spotify {
       }
     }
   }
+
+  public static void clearConsole() {
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
+  }
 }
 
 class User {
@@ -159,4 +200,18 @@ class User {
   public void setAccountType(String newAccountType) {
     this.accountType = newAccountType;
   }
+
+  public double getFeePerMonth() {
+    switch (this.accountType.toLowerCase()) {
+      case "student":
+        return 4.99;
+      case "family":
+        return 14.99;
+      case "individual":
+        return 9.99;
+      default:
+        return 99.99;
+    }
+  }
+
 }

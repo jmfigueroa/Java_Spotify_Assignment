@@ -20,6 +20,9 @@ ________
 ### ArrayList
 - [Get the size of an ArrayList in Java](https://www.tutorialspoint.com/get-the-size-of-an-arraylist-in-java#:~:text=The%20size%20of%20an%20ArrayList%20can%20be%20obtained%20by%20using,the%20ArrayList%20i.e.%20the%20size.)
 - [How to iterate through an ArrayList of Objects of ArrayList of Objects](https://xspdf.com/resolution/58257776.html)
+
+### Console Operations
+- [StackOverflow - Java, clear console](https://stackoverflow.com/a/32295974)
 ________
 
 ## Pseudocode
