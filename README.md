@@ -56,7 +56,7 @@ graph TD
     W -.-> F
     ```
     
-  ![alt flowchart](./mermaid-diagram-20200929073723.png)
+  ![alt flowchart](./mermaid-diagram.png)
     
     
     
