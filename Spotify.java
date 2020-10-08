@@ -23,7 +23,7 @@ public class Spotify {
     System.out.print("Password: ");
     String password = scn.nextLine();
 
-    User user = checkCredentials(username, password, accounts);
+    User user = checkCredentials(username.trim(), password.trim(), accounts);
     if (user.isValid()) {
       clearConsole();
       System.out.println("Welcome back, " + user.getUsername());
@@ -108,7 +108,7 @@ public class Spotify {
         wait(2500);
         navMenu(u, s);
       } else {
-        System.out.println("Your plan has been changed to the " + u.getAccountType() + " plan. You will be billed $"
+        System.out.println("Your plan has been changed to the " + u.getAccountType() + " plan. \nYou will be billed $"
             + u.getFeePerMonth() + " per month beginning the next billing cycle.");
         wait(3000);
         navMenu(u, s);
@@ -119,24 +119,31 @@ public class Spotify {
   }
 
   public static void handleStudentOption(User u, Scanner s, int eduCounter) {
-    ++eduCounter;
     clearConsole();
     System.out.print("Please enter your STUDENT email address: ");
-    s.nextLine();
-    String emailAddress = s.nextLine();
+    if (eduCounter < 1) {
+      s.nextLine();
+    }
+    String emailAddress = "";
+    emailAddress = s.nextLine();
+    clearConsole();
+    System.out.print("Verifying");
     ellipses(0);
-    if (eduCounter < 2) {
-      if (verifyEdu(emailAddress)) {
+    clearConsole();
+    if (eduCounter < 3) {
+      if (verifyEdu(emailAddress.trim())) {
         clearConsole();
-        System.out.println("Congratuations. Your student email has been verified!");
+        System.out.println("Congratuations. Your student email address has been verified!");
         wait(1500);
         u.setAccountType("Student");
         clearConsole();
       } else {
         System.out.println("Sorry, we weren't able to verify your STUDENT email address. \nPlease try again...");
+        ++eduCounter;
         handleStudentOption(u, s, eduCounter);
       }
     } else {
+      clearConsole();
       System.out.println("We're sorry but you are not eligible for the Spotify Student plan.");
       wait(2500);
     }
@@ -144,11 +151,18 @@ public class Spotify {
 
   public static Boolean verifyEdu(String email) {
     Boolean isEdu = false;
-    String domain = email.split("@")[1];
-    String topLvlDomain = domain.toString().split("\\.")[domain.split("\\.").length - 1];
-    System.out.println(topLvlDomain);
-    if (topLvlDomain.equals("edu")) {
-      isEdu = true;
+    if (email.contains("@")) {
+      String domain = email.split("@")[1];
+      String topLvlDomain = domain.toString().split("\\.")[domain.split("\\.").length - 1];
+      System.out.println(topLvlDomain);
+      if (topLvlDomain.equals("edu")) {
+        isEdu = true;
+      } else {
+      }
+    } else {
+      clearConsole();
+      System.out.println("Pease enter a valid and active STUDENT email address");
+      wait(2500);
     }
     return isEdu;
   }
