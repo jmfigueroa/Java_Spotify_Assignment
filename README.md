@@ -21,7 +21,7 @@ ________
 -
 [StackOverflow: Split string with dot as
 delimiter](https://stackoverflow.com/a/3387646) - b/c regex
-
+- [Trim](https://www.geeksforgeeks.org/java-string-trim-method-example/)
 ### ArrayList
 - [Get the size of an ArrayList in Java](https://www.tutorialspoint.com/get-the-size-of-an-arraylist-in-java#:~:text=The%20size%20of%20an%20ArrayList%20can%20be%20obtained%20by%20using,the%20ArrayList%20i.e.%20the%20size.)
 - [How to iterate through an ArrayList of Objects of ArrayList of Objects](https://xspdf.com/resolution/58257776.html)
