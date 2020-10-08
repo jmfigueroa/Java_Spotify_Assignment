@@ -21,15 +21,58 @@ public class Spotify {
     String username = scn.nextLine();
     System.out.print("Password: ");
     String password = scn.nextLine();
-    Boolean userAuthenticated = checkCredentials(username, password, accounts);
-    if (userAuthenticated) {
+    User user = checkCredentials(username, password, accounts);
+    if (!user.getUsername().isEmpty()) {
       // Proceed
-      System.out.println("proceeding");
+      System.out.println("Welcome back, " + user.getUsername());
+      navMenu(user, scn);
     } else {
       ++counter;
       start(counter);
     }
     scn.close();
+  }
+
+  public static void navMenu(User usr, Scanner sc) {
+    System.out.println("Please select an option: ");
+    System.out.println("1) View your account information \n2) Change your current plan \n3) Exit");
+    Integer optionSelected = sc.nextInt();
+    if (optionSelected == 1) {
+      viewAccountInfo(usr, sc);
+      navMenu(usr, sc);
+    } else if (optionSelected == 2) {
+      changePlan(usr, sc);
+    } else if (optionSelected == 3) {
+      System.out.println("Thank you for using Spotify.\nNow exiting");
+      ellipses(0);
+      System.exit(0);
+    }
+  }
+
+  public static void viewAccountInfo(User u, Scanner s) {
+    System.out.println("Username: " + u.getUsername());
+    System.out.println("Password: *********");
+    System.out.println("Account Type: " + u.getAccountType());
+    System.out.println();
+  }
+
+  public static void changePlan(User u, Scanner s) {
+    System.out.println(
+        "You are currently under the " + u.getAccountType() + " plan. Would you like to change your plan? (y/n)");
+    String res = s.nextLine();
+    // EXITING HERE
+    if (res.equals("Y") || res.equals("y")) {
+      System.out.println("Would you like to change your plan to:\n1) Student\2) Individual\n3)Family\4) Exit");
+      int newPlan = s.nextInt();
+      if (newPlan == 4) {
+        navMenu(u, s);
+      } else if (newPlan == 2) {
+        u.setAccountType("Individual");
+        System.out.println("Your plan has been changed to the " + u.getAccountType()
+            + " plan. You will be billed $9.99 per month beginning the next billing cycle.");
+      }
+
+    }
   }
 
   public static ArrayList<User> readFileToArrayList() {
@@ -59,8 +102,8 @@ public class Spotify {
     return true;
   }
 
-  public static Boolean checkCredentials(String usr, String pass, ArrayList<User> accnts) {
-    Boolean authenticated = false;
+  public static User checkCredentials(String usr, String pass, ArrayList<User> accnts) {
+    User authenticatedUser = new User();
     String response = "Incorrect username or password. Please try again.";
     if (validateUserInput(usr, pass) == true) {
       System.out.print("Authenticating");
@@ -68,7 +111,7 @@ public class Spotify {
         if (currentUser.getUsername().equals(usr)) {
           if (currentUser.getPassword().equals(pass)) {
             response = "Authenticated!";
-            authenticated = true;
+            authenticatedUser = currentUser;
           }
         }
       }
@@ -78,7 +121,7 @@ public class Spotify {
     }
     ellipses(0);
     System.out.println("\n" + response);
-    return authenticated;
+    return authenticatedUser;
 
   }
 
@@ -111,5 +154,9 @@ class User {
 
   public String getAccountType() {
     return this.accountType;
+  }
+
+  public void setAccountType(String newAccountType) {
+    this.accountType = newAccountType;
   }
 }
