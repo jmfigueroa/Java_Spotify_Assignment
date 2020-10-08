@@ -1,8 +1,4 @@
 # Spotify Lab Assignment
-
-Used [this tutorial](https://andrew-flower.com/blog/Spring-Boot-and-React-1) to
-set up Java backend tooling with JavaScript frontend
-
 ________
 
 ## Resources Used
